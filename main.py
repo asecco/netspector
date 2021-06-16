@@ -25,16 +25,19 @@ class Window(QMainWindow):
         file_menu.addAction("Exit", self.exit_button)
 
         self.textbox = QLineEdit(self)
+        self.textbox.setPlaceholderText("69.89.31.226")
         self.textbox.move(100, 30)
         self.textbox.resize(400, 35)
 
         self.button = QPushButton("Lookup", self)
+        self.button.setFont(QFont('Arial', 11))
         self.button.move(240, 75)
         self.button.resize(125, 40)
         self.button.clicked.connect(self.button_click)
 
         self.label = QLabel(self)
         self.label.setWordWrap(True)
+        self.label.setFont(QFont('Arial', 14))
         self.label.move(100, 135)
         self.label.resize(400, 150)
 
@@ -43,7 +46,7 @@ class Window(QMainWindow):
 
     def button_click(self):
         textbox_value = self.textbox.text()
-        request = requests.get("http://ip-api.com/json/" + textbox_value).json()
+        request = requests.get("http://ip-api.com/json/" + textbox_value + "?fields=status,message,country,countryCode,region,regionName,city,zip,isp,org,proxy").json()
         self.label.setText(str(request))
 
     def enter_shortcut(self):
