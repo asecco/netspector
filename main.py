@@ -2,7 +2,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import requests
-import socket
 import sys
 
 class Window(QMainWindow):
@@ -26,6 +25,7 @@ class Window(QMainWindow):
         file_menu.addAction("Exit", self.exit_button)
 
         self.textbox = QLineEdit(self)
+
         self.textbox.move(90, 30)
         self.textbox.resize(400, 35)
 
@@ -34,15 +34,10 @@ class Window(QMainWindow):
         self.button.resize(125, 40)
         self.button.clicked.connect(self.button_click)
 
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
-        print(s.getsockname()[0])
-        s.close()
-
     def button_click(self):
-        request = requests.get("http://ip-api.com/json/24.48.0.1").json()
+        textbox_value = self.textbox.text()
+        request = requests.get("http://ip-api.com/json/" + textbox_value).json()
         print(request)
-
 
     def about_button(self):
         QMessageBox.about(self, "About", "Created By: Andrew Secco\n\nhttps://github.com/asecco")
