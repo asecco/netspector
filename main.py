@@ -3,6 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import requests
 import sys
+import pprint
 
 class Window(QMainWindow):
     def __init__(self):
@@ -38,16 +39,17 @@ class Window(QMainWindow):
         self.label = QLabel(self)
         self.label.setWordWrap(True)
         self.label.setFont(QFont('Arial', 14))
-        self.label.move(100, 135)
+        self.label.move(200, 135)
         self.label.resize(400, 150)
 
         self.shortcut = QShortcut(QKeySequence("RETURN"), self)
         self.shortcut.activated.connect(self.enter_shortcut)
 
     def button_click(self):
-        textbox_value = self.textbox.text()
-        request = requests.get("http://ip-api.com/json/" + textbox_value + "?fields=status,message,country,countryCode,region,regionName,city,zip,isp,org,proxy").json()
-        self.label.setText(str(request))
+        self.textbox_value = self.textbox.text()
+        self.request = requests.get("http://ip-api.com/json/" + self.textbox_value + "?fields=country,regionName,city,zip,isp,proxy,message").json()
+        self.request = pprint.pformat(self.request, sort_dicts=False).replace('{', '').replace('}', '').replace("'", '')
+        self.label.setText(str(self.request))
 
     def enter_shortcut(self):
         self.button.click()
