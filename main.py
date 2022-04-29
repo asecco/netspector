@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+import qdarktheme
 import requests
 import sys
 import pprint
@@ -11,11 +12,8 @@ class Window(QMainWindow):
         super().__init__()
         self.setWindowTitle("IP Location Lookup")
         self.setFixedSize(650, 500)
-        self.setWindowIcon(QIcon('icon.png'))
-
-        p = self.palette()
-        p.setColor(QPalette.Window, Qt.white)
-        self.setPalette(p)
+        self.setWindowIcon(QIcon('icon.ico'))
+        app.setStyleSheet(qdarktheme.load_stylesheet("light"))
 
         self.init_ui()
         self.show()
@@ -40,12 +38,16 @@ class Window(QMainWindow):
         self.label = QLabel(self)
         self.label.setWordWrap(True)
         self.label.setFont(QFont('Arial', 12))
-        self.label.move(425, 200)
-        self.label.resize(400, 150)
+        self.label.move(420, 190)
+        self.label.resize(400, 180)
 
         self.map_label = QLabel(self)
         self.map_label.move(15, 85)
         self.map_label.resize(400, 400)
+
+        self.dt_checkbox = QCheckBox('Dark Theme', self)
+        self.dt_checkbox.move(560, 470)
+        self.dt_checkbox.stateChanged.connect(self.checkbox_click)
 
         self.shortcut = QShortcut(QKeySequence("RETURN"), self)
         self.shortcut.activated.connect(self.enter_shortcut)
@@ -55,6 +57,7 @@ class Window(QMainWindow):
         self.request = requests.get("http://ip-api.com/json/" + self.textbox_value + "?fields=country,regionName,city,zip,isp,proxy,message,lat,lon").json()
         self.request = pprint.pformat(self.request, sort_dicts=False).replace('{', '').replace('}', '').replace("'", '')
         self.label.setText(str(self.request))
+        self.map_label.setStyleSheet("border: 1px solid black;")
         self.map_coordinates(self.request)
 
     def map_coordinates(self, r):
@@ -68,6 +71,12 @@ class Window(QMainWindow):
         self.map = QImage()
         self.map.loadFromData(requests.get(self.map_url).content)
         self.map_label.setPixmap(QPixmap(self.map))
+    
+    def checkbox_click(self):
+        if self.dt_checkbox.isChecked():
+            app.setStyleSheet(qdarktheme.load_stylesheet())
+        else:
+            app.setStyleSheet(qdarktheme.load_stylesheet("light"))
 
     def enter_shortcut(self):
         self.button.click()
