@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+import os
 
 import main_window
 
@@ -14,12 +15,28 @@ class LogWindow(QListWidget):
 
         self.ips = main_window.Window.ip_list
         self.addItems(self.ips)
+        self.clicked.connect(self.export_btn_click)
 
         self.clear_btn = QPushButton('Clear', self)
         self.clear_btn.setFont(QFont('Arial', 11))
         self.clear_btn.move(295, 170)
         self.clear_btn.resize(50, 25)
-        self.clear_btn.clicked.connect(self.clear_click)
+        self.clear_btn.clicked.connect(self.clear_btn_click)
 
-    def clear_click(self):
+        self.export_btn = QPushButton('Export', self)
+        self.export_btn.setFont(QFont('Arial', 11))
+        self.export_btn.move(245, 170)
+        self.export_btn.resize(50, 25)
+        self.export_btn.clicked.connect(self.export_btn_click)
+
+    def clear_btn_click(self):
         self.clear()
+        self.ips.clear()
+    
+    def export_btn_click(self):
+        os.chdir('IP-Location-Lookup/exports')
+        with open('ips.txt', 'w') as self.file:
+            self.header = '[IPs]'
+            self.file.write(self.header + '\n')
+            for self.ip in self.ips:
+                self.file.write(self.ip + '\n')
