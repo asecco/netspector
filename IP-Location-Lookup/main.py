@@ -89,8 +89,8 @@ class Window(QMainWindow):
         self.button.click()
 
     def logs_button(self):
-        self.history_window = HistoryWindow()
-        self.history_window.show()
+        self.log_window = LogWindow()
+        self.log_window.show()
 
     def about_button(self):
         QMessageBox.about(self, "About", "Created By: Andrew Secco\n\nhttps://github.com/asecco")
@@ -98,7 +98,7 @@ class Window(QMainWindow):
     def exit_button(self):
         sys.exit()
 
-class HistoryWindow(QListWidget):
+class LogWindow(QListWidget):
     def __init__(self):
         super().__init__()
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
