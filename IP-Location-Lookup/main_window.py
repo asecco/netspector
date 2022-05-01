@@ -61,13 +61,13 @@ class Window(QMainWindow):
     
     def lookup_btn_click(self):
         self.textbox_value = self.textbox.text().strip()
-        if self.textbox_value != '':
-            self.ip_list.append(self.textbox_value)
-
         self.request = requests.get("http://ip-api.com/json/" + self.textbox_value + "?fields=country,regionName,city,zip,isp,proxy,message,lat,lon").json()
         self.request = pprint.pformat(self.request, sort_dicts=False).replace('{', '').replace('}', '').replace("'", '')
         self.label.setText(str(self.request))
         self.map_label.setStyleSheet("border: 1px solid black;")
+
+        if self.textbox_value != '' and self.request != 'message: invalid query':
+            self.ip_list.append(self.textbox_value)
         
         if self.request != 'message: invalid query':
             self.map_coordinates(self.request)
