@@ -68,7 +68,16 @@ class Window(QMainWindow):
         self.request = pprint.pformat(self.request, sort_dicts=False).replace('{', '').replace('}', '').replace("'", '')
         self.label.setText(str(self.request))
         self.map_label.setStyleSheet("border: 1px solid black;")
-        self.map_coordinates(self.request)
+        
+        if self.request != 'message: invalid query':
+            self.map_coordinates(self.request)
+            self.map_label.setHidden(False)
+            self.label.move(420, 190)
+            self.textbox.setStyleSheet("")
+        else:
+            self.map_label.setHidden(True)
+            self.label.move(240, 160)
+            self.textbox.setStyleSheet("border: 1px solid red;")
     
     def map_coordinates(self, r):
         self.lat = re.search(r'lat:\s(.*)', r)
