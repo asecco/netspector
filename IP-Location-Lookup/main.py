@@ -58,7 +58,9 @@ class Window(QMainWindow):
 
     def button_click(self):
         self.textbox_value = self.textbox.text().strip()
-        self.ip_list.append(self.textbox_value)
+        if self.textbox_value != '':
+            self.ip_list.append(self.textbox_value)
+
         self.request = requests.get("http://ip-api.com/json/" + self.textbox_value + "?fields=country,regionName,city,zip,isp,proxy,message,lat,lon").json()
         self.request = pprint.pformat(self.request, sort_dicts=False).replace('{', '').replace('}', '').replace("'", '')
         self.label.setText(str(self.request))
