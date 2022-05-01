@@ -8,11 +8,12 @@ import pprint
 import re
 
 class Window(QMainWindow):
+    ip_list = []
     def __init__(self):
         super().__init__()
         self.setWindowTitle("IP Location Lookup")
         self.setFixedSize(650, 500)
-        self.setWindowIcon(QIcon('icon.ico'))
+        self.setWindowIcon(QIcon('IP-Location-Lookup/img/icon.ico'))
         app.setStyleSheet(qdarktheme.load_stylesheet("light"))
 
         self.init_ui()
@@ -23,6 +24,9 @@ class Window(QMainWindow):
         file_menu = menubar.addMenu("File")
         file_menu.addAction("About", self.about_button)
         file_menu.addAction("Exit", self.exit_button)
+
+        file_menu = menubar.addMenu("Tools")
+        file_menu.addAction("IP Logs", self.logs_button)
 
         self.textbox = QLineEdit(self)
         self.textbox.setPlaceholderText("69.89.31.226")
@@ -53,7 +57,8 @@ class Window(QMainWindow):
         self.shortcut.activated.connect(self.enter_shortcut)
 
     def button_click(self):
-        self.textbox_value = self.textbox.text()
+        self.textbox_value = self.textbox.text().strip()
+        self.ip_list.append(self.textbox_value)
         self.request = requests.get("http://ip-api.com/json/" + self.textbox_value + "?fields=country,regionName,city,zip,isp,proxy,message,lat,lon").json()
         self.request = pprint.pformat(self.request, sort_dicts=False).replace('{', '').replace('}', '').replace("'", '')
         self.label.setText(str(self.request))
@@ -81,11 +86,35 @@ class Window(QMainWindow):
     def enter_shortcut(self):
         self.button.click()
 
+    def logs_button(self):
+        self.history_window = HistoryWindow()
+        self.history_window.show()
+
     def about_button(self):
         QMessageBox.about(self, "About", "Created By: Andrew Secco\n\nhttps://github.com/asecco")
 
     def exit_button(self):
         sys.exit()
+
+class HistoryWindow(QListWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowFlags(Qt.WindowStaysOnTopHint)
+        self.setWindowTitle("IP Logs")
+        self.setFixedSize(350, 200)
+        self.setWindowIcon(QIcon('IP-Location-Lookup/img/icon.ico'))
+
+        self.ips = Window.ip_list
+        self.addItems(self.ips)
+
+        self.clear_btn = QPushButton('Clear', self)
+        self.clear_btn.setFont(QFont('Arial', 11))
+        self.clear_btn.move(295, 170)
+        self.clear_btn.resize(50, 25)
+        self.clear_btn.clicked.connect(self.clear_click)
+
+    def clear_click(self):
+        self.clear()
 
 app = QApplication(sys.argv)
 window = Window()
