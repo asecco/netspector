@@ -57,13 +57,13 @@ class Window(QMainWindow):
         self.dt_checkbox.stateChanged.connect(self.checkbox_click)
 
         self.shortcut = QShortcut(QKeySequence("RETURN"), self)
-        self.shortcut.activated.connect(self.enter_shortcut)
+        self.shortcut.activated.connect(self.lookup_btn_click)
     
     def lookup_btn_click(self):
         self.textbox_value = self.textbox.text().strip()
         self.request = requests.get("http://ip-api.com/json/" + self.textbox_value + "?fields=country,regionName,city,zip,isp,proxy,message,lat,lon").json()
         self.request = pprint.pformat(self.request, sort_dicts=False).replace('{', '').replace('}', '').replace("'", '')
-        self.label.setText(str(self.request))
+        self.label.setText(str(' ' + self.request))
         self.map_label.setStyleSheet("border: 1px solid black;")
 
         if self.textbox_value != '' and self.request != 'message: invalid query':
@@ -96,9 +96,6 @@ class Window(QMainWindow):
           main.app.setStyleSheet(qdarktheme.load_stylesheet())
         else:
           main.app.setStyleSheet(qdarktheme.load_stylesheet("light"))
-
-    def enter_shortcut(self):
-        self.lookup_btn.click()
 
     def logs_btn_click(self):
         self.log_window = log_window.LogWindow()

@@ -12,11 +12,11 @@ class LogWindow(QListWidget):
         self.setWindowTitle("IP Logs")
         self.setFixedSize(350, 200)
         self.setWindowIcon(QIcon('IP-Location-Lookup/img/icon.ico'))
+        self.setFont(QFont('Arial', 12))
         self.owd = os.getcwd() 
 
         self.ips = main_window.Window.ip_list
         self.addItems(self.ips)
-        self.clicked.connect(self.export_btn_click)
 
         self.clear_btn = QPushButton('Clear', self)
         self.clear_btn.setFont(QFont('Arial', 11))
