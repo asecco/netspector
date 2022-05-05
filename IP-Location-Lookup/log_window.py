@@ -13,7 +13,6 @@ class LogWindow(QListWidget):
         self.setFixedSize(350, 200)
         self.setWindowIcon(QIcon('IP-Location-Lookup/img/icon.ico'))
         self.setFont(QFont('Arial', 12))
-        self.owd = os.getcwd() 
 
         self.ips = main_window.Window.ip_list
         self.addItems(self.ips)
@@ -41,4 +40,4 @@ class LogWindow(QListWidget):
             self.file.write(self.header + '\n')
             for self.ip in self.ips:
                 self.file.write(self.ip + '\n')
-        os.chdir(self.owd)
+        os.chdir(main_window.Window.owd)

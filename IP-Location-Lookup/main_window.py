@@ -6,18 +6,22 @@ import sys
 import requests
 import pprint
 import re
+import os
+import configparser
 
 import main
 import log_window
 
 class Window(QMainWindow):
     ip_list = []
+    owd = os.getcwd()
     def __init__(self):
         super().__init__()
         self.setWindowTitle("IP Location Lookup")
         self.setFixedSize(650, 500)
         self.setWindowIcon(QIcon('IP-Location-Lookup/img/icon.ico'))
         main.app.setStyleSheet(qdarktheme.load_stylesheet("light"))
+        self.config = configparser.ConfigParser()
 
         self.init_ui()
         self.show()
@@ -58,6 +62,9 @@ class Window(QMainWindow):
 
         self.shortcut = QShortcut(QKeySequence("RETURN"), self)
         self.shortcut.activated.connect(self.lookup_btn_click)
+
+        self.create_config()
+        self.read_config()
     
     def lookup_btn_click(self):
         self.textbox_value = self.textbox.text().strip()
@@ -91,11 +98,40 @@ class Window(QMainWindow):
         self.map.loadFromData(requests.get(self.map_url).content)
         self.map_label.setPixmap(QPixmap(self.map))
 
-    def checkbox_click(self):
-        if self.dt_checkbox.isChecked():
-          main.app.setStyleSheet(qdarktheme.load_stylesheet())
+    def create_config(self):
+        if not os.path.exists('IP-Location-Lookup/settings'):
+            os.makedirs('IP-Location-Lookup/settings')
+            os.chdir('IP-Location-Lookup/settings')
+            self.config['GENERAL'] = {'darkmode': 'False'}
+            with open('settings.ini', 'w') as self.settings_file:
+                self.config.write(self.settings_file)            
+            os.chdir(self.owd)
+
+    def read_config(self):
+        os.chdir('IP-Location-Lookup/settings')
+        self.config.read('settings.ini')
+        if self.config['GENERAL']['darkmode'] == 'True':
+            main.app.setStyleSheet(qdarktheme.load_stylesheet())
+            self.dt_checkbox.setChecked(True)
         else:
-          main.app.setStyleSheet(qdarktheme.load_stylesheet("light"))
+            main.app.setStyleSheet(qdarktheme.load_stylesheet("light"))
+            self.dt_checkbox.setChecked(False)
+        os.chdir(self.owd)
+
+    def checkbox_click(self):
+        os.chdir(self.owd)
+        os.chdir('IP-Location-Lookup/settings')
+        self.config.read('settings.ini')
+        if self.dt_checkbox.isChecked():
+            main.app.setStyleSheet(qdarktheme.load_stylesheet())
+            self.config.set('GENERAL', 'darkmode', 'True')
+        else:
+            main.app.setStyleSheet(qdarktheme.load_stylesheet("light"))
+            self.config.set('GENERAL', 'darkmode', 'False')
+        
+        with open('settings.ini', 'w') as self.settings_file:
+            self.config.write(self.settings_file)
+        os.chdir(self.owd)
 
     def logs_btn_click(self):
         self.log_window = log_window.LogWindow()
