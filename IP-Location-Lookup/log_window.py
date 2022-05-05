@@ -34,6 +34,9 @@ class LogWindow(QListWidget):
         self.ips.clear()
     
     def export_btn_click(self):
+        if not os.path.exists('IP-Location-Lookup/exports'):
+            os.makedirs('IP-Location-Lookup/exports')
+
         os.chdir('IP-Location-Lookup/exports')
         with open('ips.txt', 'w') as self.file:
             self.header = '[IPs]'
