@@ -34,22 +34,22 @@
 ## Getting Started
 If you want to use this application, head over to the [Releases](https://github.com/asecco/IP-Location-Lookup/releases) section and download the latest version. Extract the downloaded zip file and run ```IP Location Lookup.exe```
 
-If you want to help develop this project, head down to the [Development](#development) section.
+If you want to help develop this project, head over to the [Development](#development) section.
 
 ## Features
 - Fast IP requests
-- Provided geolocation map
+- Geolocation map
 - IP logging with option for exporting
-- Dark/Light theme
+- Dark/light theme
 
 
 ## Development
-If you want to contribute to this application, setup your development environment and install the required dependencies.
+If you want to contribute to this project, setup your development environment and install the required dependencies.
 
     pip install -r requirements.txt
 
 
-Make your changes and then submit a pull request
+Make your changes and then submit a pull request.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

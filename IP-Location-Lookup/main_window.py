@@ -19,7 +19,7 @@ class Window(QMainWindow):
         super().__init__()
         self.setWindowTitle("IP Location Lookup")
         self.setFixedSize(650, 500)
-        self.setWindowIcon(QIcon('IP-Location-Lookup/icon.ico'))
+        self.setWindowIcon(QIcon('icon.ico'))
         main.app.setStyleSheet(qdarktheme.load_stylesheet("light"))
         self.config = configparser.ConfigParser()
 
@@ -99,16 +99,16 @@ class Window(QMainWindow):
         self.map_label.setPixmap(QPixmap(self.map))
 
     def create_config(self):
-        if not os.path.exists('IP-Location-Lookup/settings'):
-            os.makedirs('IP-Location-Lookup/settings')
-            os.chdir('IP-Location-Lookup/settings')
+        if not os.path.exists('settings'):
+            os.makedirs('settings')
+            os.chdir('settings')
             self.config['GENERAL'] = {'darkmode': 'False'}
             with open('settings.ini', 'w') as self.settings_file:
                 self.config.write(self.settings_file)            
             os.chdir(self.owd)
 
     def read_config(self):
-        os.chdir('IP-Location-Lookup/settings')
+        os.chdir('settings')
         self.config.read('settings.ini')
         if self.config['GENERAL']['darkmode'] == 'True':
             main.app.setStyleSheet(qdarktheme.load_stylesheet())
@@ -120,7 +120,7 @@ class Window(QMainWindow):
 
     def checkbox_click(self):
         os.chdir(self.owd)
-        os.chdir('IP-Location-Lookup/settings')
+        os.chdir('settings')
         self.config.read('settings.ini')
         if self.dt_checkbox.isChecked():
             main.app.setStyleSheet(qdarktheme.load_stylesheet())

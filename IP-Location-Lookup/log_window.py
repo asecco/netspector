@@ -11,7 +11,7 @@ class LogWindow(QListWidget):
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setWindowTitle("IP Logs")
         self.setFixedSize(350, 200)
-        self.setWindowIcon(QIcon('IP-Location-Lookup/icon.ico'))
+        self.setWindowIcon(QIcon('icon.ico'))
         self.setFont(QFont('Arial', 12))
 
         self.ips = main_window.Window.ip_dict
@@ -34,10 +34,10 @@ class LogWindow(QListWidget):
         self.ips.clear()
     
     def export_btn_click(self):
-        if not os.path.exists('IP-Location-Lookup/exports'):
-            os.makedirs('IP-Location-Lookup/exports')
+        if not os.path.exists('exports'):
+            os.makedirs('exports')
 
-        os.chdir('IP-Location-Lookup/exports')
+        os.chdir('exports')
         with open('ips.txt', 'w') as self.file:
             self.header = '[IPs]'
             self.file.write(self.header + '\n')
