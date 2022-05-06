@@ -14,7 +14,7 @@ class LogWindow(QListWidget):
         self.setWindowIcon(QIcon('IP-Location-Lookup/img/icon.ico'))
         self.setFont(QFont('Arial', 12))
 
-        self.ips = main_window.Window.ip_list
+        self.ips = main_window.Window.ip_dict
         self.addItems(self.ips)
 
         self.clear_btn = QPushButton('Clear', self)
@@ -41,6 +41,7 @@ class LogWindow(QListWidget):
         with open('ips.txt', 'w') as self.file:
             self.header = '[IPs]'
             self.file.write(self.header + '\n')
-            for self.ip in self.ips:
+            for self.ip, self.info in self.ips.items():
                 self.file.write(self.ip + '\n')
+                self.file.write(' ' + self.info + '\n\n')
         os.chdir(main_window.Window.owd)

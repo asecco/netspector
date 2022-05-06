@@ -13,7 +13,7 @@ import main
 import log_window
 
 class Window(QMainWindow):
-    ip_list = []
+    ip_dict = {}
     owd = os.getcwd()
     def __init__(self):
         super().__init__()
@@ -74,7 +74,7 @@ class Window(QMainWindow):
         self.map_label.setStyleSheet("border: 1px solid black;")
 
         if self.textbox_value != '' and self.request != 'message: invalid query':
-            self.ip_list.append(self.textbox_value)
+            self.ip_dict.update({self.textbox_value: str(self.request)})
         
         if self.request != 'message: invalid query':
             self.map_coordinates(self.request)
