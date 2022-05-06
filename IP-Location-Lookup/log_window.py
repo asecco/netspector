@@ -11,7 +11,7 @@ class LogWindow(QListWidget):
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setWindowTitle("IP Logs")
         self.setFixedSize(350, 200)
-        self.setWindowIcon(QIcon('IP-Location-Lookup/img/icon.ico'))
+        self.setWindowIcon(QIcon('IP-Location-Lookup/icon.ico'))
         self.setFont(QFont('Arial', 12))
 
         self.ips = main_window.Window.ip_dict

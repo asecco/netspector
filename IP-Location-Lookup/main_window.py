@@ -19,7 +19,7 @@ class Window(QMainWindow):
         super().__init__()
         self.setWindowTitle("IP Location Lookup")
         self.setFixedSize(650, 500)
-        self.setWindowIcon(QIcon('IP-Location-Lookup/img/icon.ico'))
+        self.setWindowIcon(QIcon('IP-Location-Lookup/icon.ico'))
         main.app.setStyleSheet(qdarktheme.load_stylesheet("light"))
         self.config = configparser.ConfigParser()
 
