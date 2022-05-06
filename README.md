@@ -32,7 +32,7 @@
 ![ip-location-lookup](https://user-images.githubusercontent.com/40510223/167050280-901f43cd-12bd-490d-8c8f-6d9d3384be2a.png)
 
 ## Getting Started
-If you want to use this application, head over the [Releases](https://github.com/asecco/IP-Location-Lookup/releases) section and download the latest version. Extract the downloaded zip file and run ```IP Location Lookup.exe```
+If you want to use this application, head over to the [Releases](https://github.com/asecco/IP-Location-Lookup/releases) section and download the latest version. Extract the downloaded zip file and run ```IP Location Lookup.exe```
 
 If you want to help develop this project, head down to the [Development](#development) section.
 
