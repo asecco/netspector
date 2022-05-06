@@ -40,11 +40,11 @@ If you want to help develop this project, head down to the [Development](#develo
 - Fast IP requests
 - Provided geolocation map
 - IP logging with option for exporting
-- Dark/Light mode
+- Dark/Light theme
 
 
 ## Development
-If you want to contribute to this application, setup your development environment and install the required dependendecies.
+If you want to contribute to this application, setup your development environment and install the required dependencies.
 
     pip install -r requirements.txt
 
