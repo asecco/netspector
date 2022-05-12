@@ -7,7 +7,7 @@
 
 <div align="center">
 
-  [![Status](https://img.shields.io/badge/status-active-success.svg)]()
+  [![Status](https://img.shields.io/badge/status-active-success.svg)](https://github.com/asecco/IP-Location-Lookup)
   [![GitHub stars](https://badgen.net/github/stars/asecco/IP-Location-Lookup)](https://github.com/asecco/IP-Location-Lookup/stargazers)
   [![GitHub Issues](https://img.shields.io/github/issues/asecco/IP-Location-Lookup.svg)](https://github.com/asecco/IP-Location-Lookup/issues)
   [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/asecco/IP-Location-Lookup.svg)](https://github.com/asecco/IP-Location-Lookup/pulls)
