@@ -8,7 +8,6 @@ import pprint
 import re
 import os
 import configparser
-
 import main
 import log_window
 
@@ -18,7 +17,7 @@ class Window(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("IP Location Lookup")
-        self.setFixedSize(650, 500)
+        self.setFixedSize(680, 500)
         self.setWindowIcon(QIcon('icon.ico'))
         main.app.setStyleSheet(qdarktheme.load_stylesheet("light"))
         self.config = configparser.ConfigParser()
@@ -37,18 +36,18 @@ class Window(QMainWindow):
 
         self.textbox = QLineEdit(self)
         self.textbox.setPlaceholderText("69.89.31.226")
-        self.textbox.move(60, 30)
+        self.textbox.move(60, 35)
         self.textbox.resize(400, 35)
 
         self.lookup_btn = QPushButton("Lookup", self)
         self.lookup_btn.setFont(QFont('Arial', 11))
-        self.lookup_btn.move(470, 30)
+        self.lookup_btn.move(470, 35)
         self.lookup_btn.resize(115, 35)
         self.lookup_btn.clicked.connect(self.lookup_btn_click)
 
         self.label = QLabel(self)
         self.label.setWordWrap(True)
-        self.label.setFont(QFont('Arial', 12))
+        self.label.setFont(QFont('Arial', 10))
         self.label.move(420, 190)
         self.label.resize(400, 180)
 
@@ -71,7 +70,7 @@ class Window(QMainWindow):
         self.request = requests.get("http://ip-api.com/json/" + self.textbox_value + "?fields=country,regionName,city,zip,isp,proxy,message,lat,lon").json()
         self.request = pprint.pformat(self.request, sort_dicts=False).replace('{', '').replace('}', '').replace("'", '')
         self.label.setText(str(' ' + self.request))
-        self.map_label.setStyleSheet("border: 1px solid black;")
+        self.map_label.setStyleSheet("border: 2px solid black;")
 
         if self.textbox_value != '' and self.request != 'message: invalid query':
             self.ip_dict.update({self.textbox_value: str(self.request)})
