@@ -11,21 +11,20 @@ class LogWindow(QListWidget):
         self.setWindowTitle("IP Logs")
         self.setFixedSize(350, 200)
         self.setWindowIcon(QIcon('icon.ico'))
-        self.setFont(QFont('Arial', 12))
 
         self.ips = main_window.Window.ip_dict
-        self.addItems(self.ips)
+        self.addItems(self.ips.keys())
 
         self.clear_btn = QPushButton('Clear', self)
         self.clear_btn.setFont(QFont('Arial', 11))
-        self.clear_btn.move(295, 170)
-        self.clear_btn.resize(50, 25)
+        self.clear_btn.move(290, 170)
+        self.clear_btn.resize(60, 25)
         self.clear_btn.clicked.connect(self.clear_btn_click)
 
         self.export_btn = QPushButton('Export', self)
         self.export_btn.setFont(QFont('Arial', 11))
-        self.export_btn.move(245, 170)
-        self.export_btn.resize(50, 25)
+        self.export_btn.move(230, 170)
+        self.export_btn.resize(60, 25)
         self.export_btn.clicked.connect(self.export_btn_click)
 
     def clear_btn_click(self):
@@ -38,8 +37,7 @@ class LogWindow(QListWidget):
 
         os.chdir('exports')
         with open('ips.txt', 'w') as self.file:
-            self.header = '[IPs]'
-            self.file.write(self.header + '\n')
+            self.file.write('[IPs]\n\n')
             for self.ip, self.info in self.ips.items():
                 self.file.write(self.ip + '\n')
                 self.file.write(' ' + self.info + '\n\n')

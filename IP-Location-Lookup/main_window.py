@@ -40,17 +40,16 @@ class Window(QMainWindow):
         self.lookup_btn.clicked.connect(self.lookup_btn_click)
 
         self.label = QLabel(self)
-        self.label.setWordWrap(True)
-        self.label.setFont(QFont('Arial', 10))
-        self.label.move(420, 190)
-        self.label.resize(400, 180)
+        self.label.setFont(QFont('Arial', 11))
+        self.label.move(60, 85)
+        self.label.resize(500, 180)
 
         self.map_label = QLabel(self)
         self.map_label.move(15, 85)
         self.map_label.resize(400, 400)
 
         self.dt_checkbox = QCheckBox('Dark Theme', self)
-        self.dt_checkbox.move(560, 470)
+        self.dt_checkbox.move(580, 470)
         self.dt_checkbox.stateChanged.connect(self.checkbox_click)
 
         self.shortcut = QShortcut(QKeySequence("RETURN"), self)
@@ -94,7 +93,7 @@ class Window(QMainWindow):
         else:
             self.map_label.setHidden(True)
             self.label.move(240, 160)
-            self.textbox.setStyleSheet("border: 1px solid red;")
+            self.textbox.setStyleSheet("border: 2px solid red;")
     
     def map_coordinates(self, r):
         self.lat = re.search(r'lat:\s(.*)', r).group().replace('lat: ', '')
