@@ -26,13 +26,7 @@ class Window(QMainWindow):
         self.show()
 
     def init_ui(self):
-        menubar = self.menuBar()
-        file_menu = menubar.addMenu("File")
-        file_menu.addAction("About", self.about_btn_click)
-        file_menu.addAction("Exit", self.exit_btn_click)
-
-        file_menu = menubar.addMenu("Tools")
-        file_menu.addAction("IP Logs", self.logs_btn_click)
+        self.create_menu()
 
         self.textbox = QLineEdit(self)
         self.textbox.setPlaceholderText("69.89.31.226")
@@ -65,17 +59,34 @@ class Window(QMainWindow):
         self.create_config()
         self.read_config()
     
+    def create_menu(self):
+        menubar = self.menuBar()
+
+        file_menu = menubar.addMenu("File")
+        about_action = QAction("About", self)
+        about_action.triggered.connect(self.about_btn_click)
+        file_menu.addAction(about_action)
+
+        exit_action = QAction("Exit", self)
+        exit_action.triggered.connect(self.exit_btn_click)
+        file_menu.addAction(exit_action)
+
+        tools_menu = menubar.addMenu("Tools")
+        logs_action = QAction("IP Logs", self)
+        logs_action.triggered.connect(self.logs_btn_click)
+        tools_menu.addAction(logs_action)
+    
     def lookup_btn_click(self):
         self.textbox_value = self.textbox.text().strip()
-        self.request = requests.get("http://ip-api.com/json/" + self.textbox_value + "?fields=country,regionName,city,zip,isp,proxy,message,lat,lon").json()
+        self.request = requests.get(f"http://ip-api.com/json/{self.textbox_value}?fields=country,regionName,city,zip,isp,proxy,message,lat,lon").json()
         self.request = pprint.pformat(self.request, sort_dicts=False).replace('{', '').replace('}', '').replace("'", '')
-        self.label.setText(str(' ' + self.request))
+        self.label.setText(' ' + str(self.request))
         self.map_label.setStyleSheet("border: 2px solid black;")
 
         if self.textbox_value != '' and self.request != 'message: invalid query':
-            self.ip_dict.update({self.textbox_value: str(self.request)})
+            self.ip_dict[self.textbox_value] = str(self.request)
         
-        if self.request != 'message: invalid query':
+        if self.request != 'message: invalid query' and self.request != 'message: private range':
             self.map_coordinates(self.request)
             self.map_label.setHidden(False)
             self.label.move(420, 190)
@@ -86,13 +97,10 @@ class Window(QMainWindow):
             self.textbox.setStyleSheet("border: 1px solid red;")
     
     def map_coordinates(self, r):
-        self.lat = re.search(r'lat:\s(.*)', r)
-        self.lat = self.lat.group().replace('lat: ', '')
+        self.lat = re.search(r'lat:\s(.*)', r).group().replace('lat: ', '')
+        self.lon = re.search(r'lon:\s(.*)', r).group().replace('lon: ', '')
 
-        self.lon = re.search(r'lon:\s(.*)', r)
-        self.lon = self.lon.group().replace('lon: ', '')
-
-        self.map_url = "https://cache.ip-api.com/" + self.lon + self.lat + '10'
+        self.map_url = f"https://cache.ip-api.com/{self.lon}{self.lat}10"
         self.map = QImage()
         self.map.loadFromData(requests.get(self.map_url).content)
         self.map_label.setPixmap(QPixmap(self.map))
