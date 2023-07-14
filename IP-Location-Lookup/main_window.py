@@ -17,7 +17,6 @@ class Window(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("IP Location Lookup")
-        self.setFixedSize(680, 500)
         self.setWindowIcon(QIcon('icon.ico'))
         main.app.setStyleSheet(qdarktheme.load_stylesheet("light"))
         self.config = configparser.ConfigParser()
@@ -28,29 +27,40 @@ class Window(QMainWindow):
     def init_ui(self):
         self.create_menu()
 
-        self.textbox = QLineEdit(self)
-        self.textbox.setPlaceholderText("69.89.31.226")
-        self.textbox.move(60, 35)
-        self.textbox.resize(400, 35)
+        self.central_widget = QWidget()
+        self.setCentralWidget(self.central_widget)
+        self.layout = QVBoxLayout(self.central_widget)
 
-        self.lookup_btn = QPushButton("Lookup", self)
+        self.form_layout = QFormLayout()
+        self.textbox = QLineEdit()
+        self.textbox.setPlaceholderText("69.89.31.226")
+        self.form_layout.addRow("IP Address:", self.textbox)
+
+        self.lookup_btn = QPushButton("Lookup")
         self.lookup_btn.setFont(QFont('Arial', 11))
-        self.lookup_btn.move(470, 35)
-        self.lookup_btn.resize(115, 35)
         self.lookup_btn.clicked.connect(self.lookup_btn_click)
 
-        self.label = QLabel(self)
+        self.form_layout.addRow("", self.lookup_btn)
+
+        self.layout.addLayout(self.form_layout)
+
+        self.label = QLabel()
+        self.label.setWordWrap(True)
         self.label.setFont(QFont('Arial', 11))
-        self.label.move(60, 85)
-        self.label.resize(500, 180)
 
-        self.map_label = QLabel(self)
-        self.map_label.move(15, 85)
-        self.map_label.resize(400, 400)
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setWidget(self.label)
+        self.layout.addWidget(scroll_area)
 
-        self.dt_checkbox = QCheckBox('Dark Theme', self)
-        self.dt_checkbox.move(580, 470)
+        self.map_label = QLabel()
+        self.map_label.setHidden(True)
+        self.layout.addWidget(self.map_label, stretch=1)
+        self.layout.setAlignment(self.map_label, Qt.AlignCenter)
+
+        self.dt_checkbox = QCheckBox('Dark Theme')
         self.dt_checkbox.stateChanged.connect(self.checkbox_click)
+        self.layout.addWidget(self.dt_checkbox)
 
         self.shortcut = QShortcut(QKeySequence("RETURN"), self)
         self.shortcut.activated.connect(self.lookup_btn_click)
