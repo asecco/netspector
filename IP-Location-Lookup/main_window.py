@@ -8,6 +8,7 @@ import pprint
 import re
 import os
 import configparser
+from scapy.layers.inet import IP, sr1, UDP
 import main
 import log_window
 
@@ -40,13 +41,20 @@ class Window(QMainWindow):
         self.lookup_btn.setFont(QFont('Arial', 11))
         self.lookup_btn.clicked.connect(self.lookup_btn_click)
 
+        self.traceroute_btn = QPushButton("Traceroute")
+        self.traceroute_btn.setFont(QFont('Arial', 11))
+        self.traceroute_btn.clicked.connect(self.traceroute_btn_click)
+
         self.form_layout.addRow("", self.lookup_btn)
+        self.form_layout.addRow("", self.traceroute_btn)
 
         self.layout.addLayout(self.form_layout)
 
         self.label = QLabel()
         self.label.setWordWrap(True)
         self.label.setFont(QFont('Arial', 11))
+        self.label.setMinimumHeight(200)
+        self.label.setAlignment(Qt.AlignTop)
 
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
@@ -89,7 +97,7 @@ class Window(QMainWindow):
         self.textbox_value = self.textbox.text().strip()
         self.request = requests.get(f"http://ip-api.com/json/{self.textbox_value}?fields=country,regionName,city,zip,isp,proxy,message,lat,lon").json()
         self.request = pprint.pformat(self.request, sort_dicts=False).replace('{', '').replace('}', '').replace("'", '')
-        self.label.setText(' ' + str(self.request))
+        self.label.setText('' + str(self.request))
         self.map_label.setStyleSheet("border: 2px solid black;")
 
         if self.textbox_value != '' and self.request != 'message: invalid query':
@@ -113,6 +121,21 @@ class Window(QMainWindow):
         self.map = QImage()
         self.map.loadFromData(requests.get(self.map_url).content)
         self.map_label.setPixmap(QPixmap(self.map))
+    
+    def traceroute_btn_click(self):
+        self.hostname = self.textbox.text().strip()
+        self.traceroute = ''
+        self.map_label.setHidden(True)
+        self.label.setText('' + self.traceroute)
+        for i in range(1, 28):
+            pkt = IP(dst=self.hostname, ttl=i) / UDP(dport=40000)
+            reply = sr1(pkt, verbose=0, timeout=1)
+            if reply is None or reply.type == 3:
+                self.traceroute += "Done!\n"
+                break
+            else:
+                self.traceroute += f'Hop {i}: {reply.src}\n'
+        self.label.setText('' + self.traceroute)
 
     def create_config(self):
         if not os.path.exists('settings'):
