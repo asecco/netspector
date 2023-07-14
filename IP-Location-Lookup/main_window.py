@@ -7,6 +7,7 @@ import requests
 import pprint
 import re
 import os
+import time
 import configparser
 from scapy.layers.inet import IP, sr1, UDP
 import main
@@ -126,16 +127,35 @@ class Window(QMainWindow):
         self.hostname = self.textbox.text().strip()
         self.traceroute = ''
         self.map_label.setHidden(True)
-        self.label.setText('' + self.traceroute)
+        self.label.setText('Traceroute started. Please wait...')
+        self.label.repaint()
+        
+        consecutive_no_response = 0
+        completed = False
         for i in range(1, 28):
-            pkt = IP(dst=self.hostname, ttl=i) / UDP(dport=40000)
-            reply = sr1(pkt, verbose=0, timeout=1)
-            if reply is None or reply.type == 3:
-                self.traceroute += "Done!\n"
+            packet = IP(dst=self.hostname, ttl=i) / UDP(dport=33434)
+            start_time = time.time()
+            reply = sr1(packet, verbose=0, timeout=2)
+            end_time = time.time()
+            if reply is None:
+                consecutive_no_response += 1
+                if consecutive_no_response > 3:
+                    self.traceroute += f'More than {3} consecutive no-response hops\n'
+                    break
+                self.traceroute += f'Hop {i}: No response\n'
+            elif reply.type == 3:
+                self.traceroute += "Traceroute complete\n"
+                completed = True
                 break
             else:
-                self.traceroute += f'Hop {i}: {reply.src}\n'
-        self.label.setText('' + self.traceroute)
+                latency = (end_time - start_time) * 1000
+                consecutive_no_response = 0
+                self.traceroute += f'Hop {i}: {reply.src} - ({latency:.2f} ms)\n'
+        
+        if not completed:
+            self.traceroute += "Traceroute ended\n"
+        
+        self.label.setText(self.traceroute)
 
     def create_config(self):
         if not os.path.exists('settings'):
