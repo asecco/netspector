@@ -9,26 +9,36 @@ class LogWindow(QListWidget):
         super().__init__()
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setWindowTitle("IP Logs")
-        self.setFixedSize(350, 200)
         self.setWindowIcon(QIcon('icon.ico'))
-
         self.ips = main_window.Window.ip_dict
-        self.addItems(self.ips.keys())
 
-        self.clear_btn = QPushButton('Clear', self)
+        self.init_ui()
+
+    def init_ui(self):
+        self.layout = QVBoxLayout(self)
+
+        self.list_widget = QListWidget(self)
+        self.list_widget.addItems(self.ips.keys())
+        self.list_widget.setFont(QFont('Arial', 11))
+        self.layout.addWidget(self.list_widget)
+
+        self.button_layout = QHBoxLayout()
+        self.layout.addLayout(self.button_layout)
+
+        self.clear_btn = QPushButton('Clear')
         self.clear_btn.setFont(QFont('Arial', 11))
-        self.clear_btn.move(290, 170)
-        self.clear_btn.resize(60, 25)
         self.clear_btn.clicked.connect(self.clear_btn_click)
+        self.button_layout.addWidget(self.clear_btn)
 
-        self.export_btn = QPushButton('Export', self)
+        self.export_btn = QPushButton('Export')
         self.export_btn.setFont(QFont('Arial', 11))
-        self.export_btn.move(230, 170)
-        self.export_btn.resize(60, 25)
         self.export_btn.clicked.connect(self.export_btn_click)
+        self.button_layout.addWidget(self.export_btn)
+
+        self.setLayout(self.layout)
 
     def clear_btn_click(self):
-        self.clear()
+        self.findChild(QListWidget).clear()
         self.ips.clear()
     
     def export_btn_click(self):

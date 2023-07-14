@@ -98,7 +98,7 @@ class Window(QMainWindow):
         self.textbox_value = self.textbox.text().strip()
         self.request = requests.get(f"http://ip-api.com/json/{self.textbox_value}?fields=country,regionName,city,zip,isp,proxy,message,lat,lon").json()
         self.request = pprint.pformat(self.request, sort_dicts=False).replace('{', '').replace('}', '').replace("'", '')
-        self.label.setText('' + str(self.request))
+        self.label.setText(' ' + str(self.request))
         self.map_label.setStyleSheet("border: 2px solid black;")
 
         if self.textbox_value != '' and self.request != 'message: invalid query':
@@ -194,6 +194,7 @@ class Window(QMainWindow):
 
     def logs_btn_click(self):
         self.log_window = log_window.LogWindow()
+        self.log_window.resize(400, 300)
         self.log_window.show()
 
     def about_btn_click(self):
