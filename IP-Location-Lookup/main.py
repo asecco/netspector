@@ -4,7 +4,7 @@ import main_window
 
 def main():
     window = main_window.Window()
-    window.resize(565, 900)
+    window.resize(575, 575)
     window.show()
     sys.exit(app.exec_())
 
