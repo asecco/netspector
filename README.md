@@ -53,7 +53,7 @@ If you want to use this locally or contribute to this project, follow the steps 
 git clone https://github.com/asecco/netspector.git
 ```
 
-2. Install the required dependencies to set up your development environment
+2. Install the required dependencies to set up your development environment. If you are on Windows, you may need to also install [Npcap](https://npcap.com/#download).
 ```py
 pip install -r requirements.txt
 ```
