@@ -1,17 +1,16 @@
 <p align="center">
   <a href="" rel="noopener">
- <img width=75px height=75px src="https://user-images.githubusercontent.com/40510223/167052736-2bc8c9f8-8998-40e6-b3c7-1c1b4d3dc57f.png" alt="Project logo"></a>
+ <img width=75px height=75px src="https://github.com/asecco/netspector/assets/40510223/f2c8e2a4-c90f-4ce4-9dc3-5a8c4c1dc4cd" alt="Project logo"></a>
 </p>
 
-<h3 align="center">IP Location Lookup</h3>
+<h3 align="center">NetSpector</h3>
 
 <div align="center">
 
-  [![Status](https://img.shields.io/badge/status-active-success.svg)](https://github.com/asecco/IP-Location-Lookup)
-  [![GitHub stars](https://badgen.net/github/stars/asecco/IP-Location-Lookup)](https://github.com/asecco/IP-Location-Lookup/stargazers)
-  [![GitHub Issues](https://img.shields.io/github/issues/asecco/IP-Location-Lookup.svg)](https://github.com/asecco/IP-Location-Lookup/issues)
-  [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/asecco/IP-Location-Lookup.svg)](https://github.com/asecco/IP-Location-Lookup/pulls)
-  [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
+  [![Last Commit](https://img.shields.io/github/last-commit/asecco/netspector)](https://github.com/asecco/netspector)
+  [![GitHub stars](https://img.shields.io/github/stars/asecco/netspector)](https://github.com/asecco/netspector/stargazers)
+  [![GitHub Issues](https://img.shields.io/github/issues/asecco/netspector.svg)](https://github.com/asecco/netspector/issues)
+  [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org)
   [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
 </div>
@@ -19,37 +18,47 @@
 <p align="center">
   <a href="#getting-started">Getting Started</a> •
   <a href="#features">Features</a> •
-  <a href="#development">Development</a> •
+  <a href="#setup">Setup</a> •
   <a href="#license">License</a>
 </p>
 
 ---
 
-<p align="center"> Easily search an IP address and identify the location, proxy status, and other geolocation information associated with the IP address.
+<p align="center"> Comprehensive network analysis tool for exploring IP/DNS info.
     <br> 
 </p>
 
-![ip-location-lookup](https://user-images.githubusercontent.com/40510223/167050280-901f43cd-12bd-490d-8c8f-6d9d3384be2a.png)
+![screenshot](https://github.com/asecco/netspector/assets/40510223/32a2885b-5a23-4a76-be82-75f785b3c212)
+
+<p align="center">Like what you see? Please consider giving NetSpector a GitHub star ⭐, it will help a lot!</p>
 
 ## Getting Started
-If you want to use this application, head over to the [Releases](https://github.com/asecco/IP-Location-Lookup/releases) section and download the latest version. Extract the downloaded zip file and run ```IP Location Lookup.exe```
+If you want to use this application, go to the [Releases](https://github.com/asecco/netspector/releases) section and download the latest version. Extract the downloaded zip file and run ```netspector.exe```
 
-If you want to help develop this project, head over to the [Development](#development) section.
+If you want to make changes to or help develop this project, head to the [Setup](#setup) section to get started.
 
 ## Features
-- Fast IP requests
+- Efficient IP/DNS lookup
 - Geolocation map
-- IP logging with option for exporting
-- Dark/light theme
+- Modern and responsive UI
+- Traceroute support to identify the network path from one location to another
+- IP lookup history with an option to export
+- Toggle between dark/light themes
 
+## Setup
+If you want to use this locally or contribute to this project, follow the steps below.
 
-## Development
-If you want to contribute to this project, setup your development environment and install the required dependencies.
+1. Clone or fork the repo
+```sh
+git clone https://github.com/asecco/netspector.git
+```
 
-    pip install -r requirements.txt
+2. Install the required dependencies to set up your development environment
+```py
+pip install -r requirements.txt
+```
 
-
-Make your changes and then submit a pull request.
+3. Make your changes and then submit a pull request.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
