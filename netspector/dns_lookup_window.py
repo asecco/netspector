@@ -55,8 +55,8 @@ class DNSLookupWindow(QMainWindow):
             self.textbox.setStyleSheet("")
             return socket.gethostbyname_ex(domain)[0:1] + socket.gethostbyname_ex(domain)[2:]
         except socket.gaierror:
-            QMessageBox.critical(self, "Error", "Invalid domain!")
             self.textbox.setStyleSheet("border: 2px solid red;")
+            QMessageBox.critical(self, "Error", "Invalid domain!")
             return None, None
 
     def display_result(self, hostname, ip):

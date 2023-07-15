@@ -4,3 +4,6 @@ __pycache__
 *.spec
 /exports
 /settings
+/dist
+/build
+*.txt

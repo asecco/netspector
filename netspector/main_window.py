@@ -88,36 +88,39 @@ class Window(QMainWindow):
         self.about_action.triggered.connect(self.about_btn_click)
         self.file_menu.addAction(self.about_action)
 
-        exit_action = QAction("Exit", self)
-        exit_action.triggered.connect(self.exit_btn_click)
-        self.file_menu.addAction(exit_action)
+        self.exit_action = QAction("Exit", self)
+        self.exit_action.triggered.connect(self.exit_btn_click)
+        self.file_menu.addAction(self.exit_action)
 
-        tools_menu = self.menubar.addMenu("Tools")
-        dns_action = QAction("DNS Lookup", self)
-        dns_action.triggered.connect(self.dns_btn_click)
-        tools_menu.addAction(dns_action)
+        self.tools_menu = self.menubar.addMenu("Tools")
+        self.dns_action = QAction("DNS Lookup", self)
+        self.dns_action.triggered.connect(self.dns_btn_click)
+        self.tools_menu.addAction(self.dns_action)
 
-        logs_action = QAction("IP Logs", self)
-        logs_action.triggered.connect(self.logs_btn_click)
-        tools_menu.addAction(logs_action)
+        self.logs_action = QAction("IP Logs", self)
+        self.logs_action.triggered.connect(self.logs_btn_click)
+        self.tools_menu.addAction(self.logs_action)
     
     def lookup_btn_click(self):
         self.textbox_value = self.textbox.text().strip()
         self.request = requests.get(f"http://ip-api.com/json/{self.textbox_value}?fields=country,regionName,city,zip,isp,proxy,message,lat,lon").json()
         self.request = pprint.pformat(self.request, sort_dicts=False).replace('{', '').replace('}', '').replace("'", '')
-        self.label.setText(' ' + str(self.request))
-        self.map_label.setStyleSheet("border: 2px solid black;")
 
         if self.textbox_value != '' and self.request != 'message: invalid query':
             self.ip_dict[self.textbox_value] = str(self.request)
         
         if self.request != 'message: invalid query' and self.request != 'message: private range':
+            self.label.setText(' ' + str(self.request))
+            self.map_label.setStyleSheet("border: 2px solid black;")
+            self.label.setHidden(False)
             self.map_coordinates(self.request)
             self.map_label.setHidden(False)
             self.textbox.setStyleSheet("")
         else:
             self.map_label.setHidden(True)
+            self.label.setHidden(True)
             self.textbox.setStyleSheet("border: 2px solid red;")
+            QMessageBox.critical(self, "Error", "Invalid IP!")
     
     def map_coordinates(self, r):
         self.lat = re.search(r'lat:\s(.*)', r).group().replace('lat: ', '')
@@ -129,38 +132,60 @@ class Window(QMainWindow):
         self.map_label.setPixmap(QPixmap(self.map))
     
     def traceroute_btn_click(self):
-        self.hostname = self.textbox.text().strip()
-        self.traceroute = ''
-        self.map_label.setHidden(True)
-        self.label.setText('Traceroute started. Please wait...')
-        self.label.repaint()
-        
-        consecutive_no_response = 0
-        completed = False
-        for i in range(1, 28):
-            packet = IP(dst=self.hostname, ttl=i) / UDP(dport=33434)
-            start_time = time.time()
-            reply = sr1(packet, verbose=0, timeout=2)
-            end_time = time.time()
-            if reply is None:
-                consecutive_no_response += 1
-                if consecutive_no_response > 3:
-                    self.traceroute += f'More than {3} consecutive no-response hops\n'
+        try:
+            self.hostname = self.textbox.text().strip()
+            self.traceroute = ''
+            self.map_label.setHidden(True)
+            self.label.setText('Traceroute started. Please wait...')
+            self.label.repaint()
+            self.textbox.setStyleSheet("")
+            self.textbox.repaint()
+            
+            consecutive_no_response = 0
+            completed = False
+            for i in range(1, 28):
+                packet = IP(dst=self.hostname, ttl=i) / UDP(dport=33434)
+                start_time = time.time()
+                reply = sr1(packet, verbose=0, timeout=2)
+                end_time = time.time()
+                if reply is None:
+                    consecutive_no_response += 1
+                    if consecutive_no_response > 3:
+                        self.traceroute += f'More than {3} consecutive no-response hops\n'
+                        self.label.setText(self.traceroute)
+                        self.label.repaint()
+                        break
+                    self.traceroute += f'Hop {i}: No response\n'
+                    self.label.setText(self.traceroute)
+                    self.label.repaint()
+                elif reply.type == 3:
+                    self.traceroute += "Traceroute complete\n"
+                    self.label.setText(self.traceroute)
+                    completed = True
                     break
-                self.traceroute += f'Hop {i}: No response\n'
-            elif reply.type == 3:
-                self.traceroute += "Traceroute complete\n"
-                completed = True
-                break
-            else:
-                latency = (end_time - start_time) * 1000
-                consecutive_no_response = 0
-                self.traceroute += f'Hop {i}: {reply.src} - ({latency:.2f} ms)\n'
-        
-        if not completed:
-            self.traceroute += "Traceroute ended\n"
-        
-        self.label.setText(self.traceroute)
+                else:
+                    latency = (end_time - start_time) * 1000
+                    consecutive_no_response = 0
+                    request = requests.get(f"http://ip-api.com/json/{reply.src}?fields=city,country,isp").json()
+                    city = request.get("city")
+                    country = request.get("country")
+                    isp = request.get("isp")
+                    if city and country and isp:
+                        self.traceroute += f'Hop {i}: {reply.src} - {city}, {country}, {isp} - ({latency:.2f} ms)\n'
+                        self.label.setText(self.traceroute)
+                        self.label.repaint()
+                    else:
+                        self.traceroute += f'Hop {i}: {reply.src} - ({latency:.2f} ms)\n'
+                        self.label.setText(self.traceroute)
+                        self.label.repaint()
+            
+            if not completed:
+                self.traceroute += "Traceroute ended\n"
+                self.label.setText(self.traceroute)
+        except:
+            self.textbox.setStyleSheet("border: 2px solid red;")
+            QMessageBox.critical(self, "Error", "Invalid IP!")
+            self.label.setText('')
 
     def create_config(self):
         if not os.path.exists('settings'):
