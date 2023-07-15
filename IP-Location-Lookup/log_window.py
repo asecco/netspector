@@ -7,7 +7,6 @@ import main_window
 class LogWindow(QListWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setWindowTitle("IP Logs")
         self.setWindowIcon(QIcon('icon.ico'))
         self.ips = main_window.Window.ip_dict

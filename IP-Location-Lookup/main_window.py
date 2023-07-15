@@ -12,6 +12,7 @@ import configparser
 from scapy.layers.inet import IP, sr1, UDP
 import main
 import log_window
+import dns_lookup_window
 
 class Window(QMainWindow):
     ip_dict = {}
@@ -48,7 +49,6 @@ class Window(QMainWindow):
 
         self.form_layout.addRow("", self.lookup_btn)
         self.form_layout.addRow("", self.traceroute_btn)
-
         self.layout.addLayout(self.form_layout)
 
         self.label = QLabel()
@@ -57,13 +57,15 @@ class Window(QMainWindow):
         self.label.setMinimumHeight(200)
         self.label.setAlignment(Qt.AlignTop)
 
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setWidget(self.label)
-        self.layout.addWidget(scroll_area)
+        self.scroll_area = QScrollArea()
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_area.setWidget(self.label)
+        self.scroll_area.setMinimumHeight(200)
+        self.layout.addWidget(self.scroll_area)
 
         self.map_label = QLabel()
         self.map_label.setHidden(True)
+        self.map_label.setMaximumHeight(400)
         self.layout.addWidget(self.map_label, stretch=1)
         self.layout.setAlignment(self.map_label, Qt.AlignCenter)
 
@@ -90,6 +92,10 @@ class Window(QMainWindow):
         file_menu.addAction(exit_action)
 
         tools_menu = menubar.addMenu("Tools")
+        dns_action = QAction("DNS Lookup", self)
+        dns_action.triggered.connect(self.dns_btn_click)
+        tools_menu.addAction(dns_action)
+
         logs_action = QAction("IP Logs", self)
         logs_action.triggered.connect(self.logs_btn_click)
         tools_menu.addAction(logs_action)
@@ -191,6 +197,11 @@ class Window(QMainWindow):
         with open('settings.ini', 'w') as self.settings_file:
             self.config.write(self.settings_file)
         os.chdir(self.owd)
+    
+    def dns_btn_click(self):
+        self.dns_lookup_window = dns_lookup_window.DNSLookupWindow()
+        self.dns_lookup_window.resize(400, 300)
+        self.dns_lookup_window.show()
 
     def logs_btn_click(self):
         self.log_window = log_window.LogWindow()
