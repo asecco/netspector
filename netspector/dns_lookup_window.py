@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QFormLayout, QLineEdit, QPushButton, QLabel, QScrollArea, QMenu, QAction, QMessageBox, QShortcut
+from PyQt5.QtGui import QIcon, QFont, QKeySequence, QCursor
+from PyQt5.QtCore import Qt
 import socket
 
 class DNSLookupWindow(QMainWindow):

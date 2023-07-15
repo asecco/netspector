@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QMainWindow, QAction, QWidget, QVBoxLayout, QFormLayout, QLineEdit, QPushButton, QLabel, QScrollArea, QCheckBox, QMessageBox, QShortcut
+from PyQt5.QtGui import QIcon, QFont, QPixmap, QImage, QKeySequence
+from PyQt5.QtCore import Qt
 import qdarktheme
 import sys
 import requests
@@ -136,6 +136,7 @@ class Window(QMainWindow):
             self.hostname = self.textbox.text().strip()
             self.traceroute = ''
             self.map_label.setHidden(True)
+            self.label.setHidden(False)
             self.label.setText('Traceroute started. Please wait...')
             self.label.repaint()
             self.textbox.setStyleSheet("")
