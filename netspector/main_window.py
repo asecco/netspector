@@ -19,7 +19,7 @@ class Window(QMainWindow):
     owd = os.getcwd()
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("IP Location Lookup")
+        self.setWindowTitle("NetSpector")
         self.setWindowIcon(QIcon('icon.ico'))
         main.app.setStyleSheet(qdarktheme.load_stylesheet("light"))
         self.config = configparser.ConfigParser()
@@ -72,6 +72,7 @@ class Window(QMainWindow):
         self.dt_checkbox = QCheckBox('Dark Theme')
         self.dt_checkbox.stateChanged.connect(self.checkbox_click)
         self.layout.addWidget(self.dt_checkbox)
+        self.layout.setAlignment(self.dt_checkbox, Qt.AlignLeft)
 
         self.shortcut = QShortcut(QKeySequence("RETURN"), self)
         self.shortcut.activated.connect(self.lookup_btn_click)
@@ -80,18 +81,18 @@ class Window(QMainWindow):
         self.read_config()
     
     def create_menu(self):
-        menubar = self.menuBar()
+        self.menubar = self.menuBar()
 
-        file_menu = menubar.addMenu("File")
-        about_action = QAction("About", self)
-        about_action.triggered.connect(self.about_btn_click)
-        file_menu.addAction(about_action)
+        self.file_menu = self.menubar.addMenu("File")
+        self.about_action = QAction("About", self)
+        self.about_action.triggered.connect(self.about_btn_click)
+        self.file_menu.addAction(self.about_action)
 
         exit_action = QAction("Exit", self)
         exit_action.triggered.connect(self.exit_btn_click)
-        file_menu.addAction(exit_action)
+        self.file_menu.addAction(exit_action)
 
-        tools_menu = menubar.addMenu("Tools")
+        tools_menu = self.menubar.addMenu("Tools")
         dns_action = QAction("DNS Lookup", self)
         dns_action.triggered.connect(self.dns_btn_click)
         tools_menu.addAction(dns_action)
