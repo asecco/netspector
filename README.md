@@ -24,7 +24,7 @@
 
 ---
 
-<p align="center"> Comprehensive network analysis tool for exploring IP/DNS info.
+<p align="center"> Versatile network analysis tool for exploring IP/DNS info.
     <br> 
 </p>
 
