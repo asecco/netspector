@@ -52,9 +52,11 @@ class DNSLookupWindow(QMainWindow):
 
     def get_dns_info(self, domain):
         try:
+            self.textbox.setStyleSheet("")
             return socket.gethostbyname_ex(domain)[0:1] + socket.gethostbyname_ex(domain)[2:]
         except socket.gaierror:
             QMessageBox.critical(self, "Error", "Invalid domain!")
+            self.textbox.setStyleSheet("border: 2px solid red;")
             return None, None
 
     def display_result(self, hostname, ip):

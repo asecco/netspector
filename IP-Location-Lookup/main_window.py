@@ -113,11 +113,9 @@ class Window(QMainWindow):
         if self.request != 'message: invalid query' and self.request != 'message: private range':
             self.map_coordinates(self.request)
             self.map_label.setHidden(False)
-            self.label.move(420, 190)
             self.textbox.setStyleSheet("")
         else:
             self.map_label.setHidden(True)
-            self.label.move(240, 160)
             self.textbox.setStyleSheet("border: 2px solid red;")
     
     def map_coordinates(self, r):

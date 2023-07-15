@@ -41,6 +41,9 @@ class LogWindow(QListWidget):
         self.ips.clear()
     
     def export_btn_click(self):
+        if self.ips == {}:
+            QMessageBox.information(self, "Export", "No IPs to export.")
+            return
         if not os.path.exists('exports'):
             os.makedirs('exports')
 
